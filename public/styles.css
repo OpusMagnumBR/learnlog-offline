@@ -1,0 +1,148 @@
+/* ====== LearnLog – polished dark UI ====== */
+:root{
+  --bg:#0b0d10; --bg-elev:#0f141a; --card:#11161b;
+  --fg:#e9eef2; --muted:#aeb7c2; --border:#1c232c;
+  --accent:#75c7ff; --accent-2:#60a8ff;
+  --shadow: 0 6px 20px rgba(0,0,0,.35);
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font: 500 16px/1.45 system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  color:var(--fg);
+  background:
+    radial-gradient(1200px 800px at 10% -20%, #0f1320 0%, transparent 70%),
+    radial-gradient(900px 700px at 90% -10%, #0c1a27 0%, transparent 60%),
+    var(--bg);
+}
+
+/* ----- Header ----- */
+header{
+  position:sticky; top:0; z-index:10;
+  display:flex; align-items:center; gap:.6rem;
+  padding:.75rem 1rem;
+  background:color-mix(in srgb, var(--bg-elev) 92%, transparent);
+  border-bottom:1px solid var(--border);
+  backdrop-filter: saturate(140%) blur(6px);
+}
+h1{margin:0; font-size:1.05rem; letter-spacing:.3px; opacity:.95; white-space:nowrap}
+#search{
+  flex:1; min-width:220px;
+  padding:.65rem .9rem;
+  border:1px solid var(--border);
+  border-radius:.7rem;
+  background:#0e1318; color:var(--fg);
+  outline:none; transition:border-color .15s ease, box-shadow .15s ease;
+}
+#search:focus{border-color:var(--accent); box-shadow:0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent)}
+
+button{
+  padding:.6rem .95rem;
+  border:1px solid var(--border);
+  border-radius:.7rem;
+  background:var(--bg-elev);
+  color:var(--fg);
+  cursor:pointer;
+  transition: transform .08s ease, box-shadow .15s ease, outline-color .15s ease, border-color .15s ease;
+}
+button:hover{ transform: translateY(-1px); box-shadow:var(--shadow) }
+button:active{ transform: translateY(0) }
+button:focus{ outline:2px solid var(--accent); outline-offset:1px }
+
+/* Primary/ghost styles via IDs (bez zmian w HTML) */
+#add{
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 20%, var(--bg-elev)) 0%, var(--bg-elev) 100%);
+}
+#add:hover{ box-shadow: 0 6px 18px color-mix(in srgb, var(--accent) 20%, transparent) }
+#scan{
+  background:transparent;
+  border-color:var(--border);
+  opacity:.95;
+}
+
+/* ----- Layout ----- */
+main{ padding:1.2rem }
+@media (min-width:920px){ main{ max-width:1100px; margin:0 auto } }
+
+/* ----- List / items ----- */
+ul{ list-style:none; margin:0; padding:0; display:grid; gap:.75rem }
+@media (min-width:720px){ ul{ grid-template-columns: repeat(2, minmax(0,1fr)) } }
+@media (min-width:1080px){ ul{ grid-template-columns: repeat(3, minmax(0,1fr)) } }
+
+ul:empty::before{
+  content:"Brak instrukcji. Kliknij „+ Nowa instrukcja”, aby dodać pierwszą.";
+  display:block; padding:2.2rem 1rem; text-align:center;
+  color:var(--muted); border:1px dashed var(--border);
+  border-radius:1rem; background: #0e1318;
+}
+
+.item{
+  display:flex; justify-content:space-between; align-items:center; gap:.9rem;
+  padding:1rem; min-height:72px;
+  background: linear-gradient(180deg, var(--card), #0f141a);
+  border:1px solid var(--border); border-radius:1rem;
+  box-shadow: 0 1px 0 rgba(255,255,255,.02) inset;
+  transition: transform .12s ease, box-shadow .2s ease, border-color .2s ease;
+}
+.item:hover{ transform: translateY(-2px); box-shadow: var(--shadow) }
+.item .meta{ display:flex; flex-direction:column; gap:.25rem; overflow:hidden }
+.item .title{ font-weight:650; white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
+.item .tags{ color:var(--muted); font-size:.9rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
+.item .actions{ display:flex; gap:.45rem }
+.item .fav{ color: gold; border-color: color-mix(in srgb, gold 30%, var(--border)) }
+.item .share{ border-color: color-mix(in srgb, var(--accent) 25%, var(--border)) }
+
+/* ----- Chips / small info ----- */
+chip,.chip{
+  font-size:.8rem; padding:.2rem .55rem;
+  border:1px solid var(--border); border-radius:999px;
+  background:#0f141a; color:var(--muted)
+}
+
+/* ----- Dialogs / modals ----- */
+dialog{
+  border:1px solid var(--border);
+  border-radius:1rem;
+  padding:1rem;
+  background:#0e1318; color:var(--fg);
+  max-width:min(980px,96vw);
+  box-shadow: var(--shadow);
+}
+dialog::backdrop{ background:rgba(0,0,0,.55) }
+menu{ display:flex; gap:.6rem; justify-content:flex-end; padding:0; margin-top:.8rem }
+
+/* Steps inside modal */
+#steps{ display:grid; gap:.9rem; max-height:65vh; overflow:auto; padding:.25rem }
+.step{
+  border:1px solid var(--border); border-radius:.9rem;
+  padding:.85rem; background: linear-gradient(180deg, #0f141a, #0e1318);
+}
+.step-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:.55rem }
+.step-no{ font-weight:700 }
+.step-text{
+  width:100%; resize:vertical; min-height:3rem;
+  border:1px solid var(--border); border-radius:.6rem;
+  background:#0f141a; color:var(--fg);
+  padding:.65rem .8rem;
+}
+.step-photo{
+  display:grid; grid-template-columns: 132px 1fr; gap:.9rem; align-items:start; margin-top:.7rem
+}
+.step-photo img{
+  width:132px; height:96px; object-fit:cover;
+  border:1px solid var(--border); border-radius:.6rem; background:#11161b
+}
+.photo-input{ width:100% }
+
+/* Media in dialogs */
+video{ width:min(520px, 85vw); border:1px solid var(--border); border-radius:.9rem }
+canvas{ border:1px solid var(--border); border-radius:.6rem; background:#11161b }
+
+/* ----- Nice scrollbars (Chromium/Edge) ----- */
+*::-webkit-scrollbar{ height:10px; width:10px }
+*::-webkit-scrollbar-track{ background:#0e1318 }
+*::-webkit-scrollbar-thumb{ background:#212b36; border-radius:999px; border:2px solid #0e1318 }
+*::-webkit-scrollbar-thumb:hover{ background:#2a3643 }

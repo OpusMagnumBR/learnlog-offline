@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="./styles.css">
+  <title>LearnLog</title>
+</head>
+<body>
+
+<!-- ---- AUTH UI ---- -->
+<section id="auth-box" style="padding:1rem 1rem 0">
+  <h2 id="auth-title">Zaloguj się</h2>
+  <form id="auth-form" style="display:flex; gap:.5rem; flex-wrap:wrap">
+    <!-- logowanie: email LUB login; w trybie rejestracji placeholder zmieni się na 'Email' -->
+    <input id="auth-id" type="text" placeholder="Email lub login" required />
+    <input id="auth-pass" type="password" placeholder="Hasło" required minlength="6" />
+
+    <!-- ukryte – pokazujemy tylko w trybie rejestracji -->
+    <input id="auth-username" type="text" placeholder="Login" style="display:none" />
+
+    <button id="btn-signin" type="submit">Zaloguj</button>
+    <button id="btn-signup" type="button">Załóż konto</button>
+    <button id="btn-reset" type="button">Resetasda hasła</button>
+  </form>
+</section>
+
+  <!-- ---- APP (ukryta do czasu zalogowania) ---- -->
+  <div id="app-root" hidden>
+    <header>
+      <h1>LearnLog</h1>
+      <input id="search" placeholder="Szukaj po tytule lub tagu" aria-label="Szukaj" />
+      <button id="add" title="Dodaj nową instrukcję">+ Nowa instrukcja</button>
+      <button id="scan" title="Zeskanuj kod QR">Skanuj QR</button>
+      <span id="pwa-status" class="chip" aria-live="polite"></span>
+      <button id="btn-logout" title="Wyloguj">Wyloguj</button>
+    </header>
+
+    <main>
+      <ul id="list" role="list"></ul>
+    </main>
+  </div>
+
+  <!-- ===== Dialogi i template’y (bez zmian) ===== -->
+  <dialog id="dlg-instruction">
+    <form method="dialog">
+      <h2 id="instr-title">Instrukcja</h2>
+      <div id="steps"></div>
+      <menu>
+        <button id="btn-add-step" value="addstep">+ Dodaj krok</button>
+        <button id="btn-close" value="close">Zamknij</button>
+      </menu>
+    </form>
+  </dialog>
+
+  <template id="tmpl-item">
+    <li class="item">
+      <div class="meta">
+        <div class="title" aria-label="Tytuł"></div>
+        <div class="tags" aria-label="Tagi"></div>
+      </div>
+      <div class="actions">
+        <button class="open">Otwórz</button>
+        <button class="fav" title="Ulubione">★</button>
+        <button class="share" title="Pokaż QR">QR</button>
+      </div>
+    </li>
+  </template>
+
+  <template id="tmpl-step">
+    <div class="step">
+      <div class="step-head">
+        <strong class="step-no"></strong>
+        <button class="del-step" title="Usuń krok">Usuń</button>
+      </div>
+      <textarea class="step-text" rows="3" placeholder="Opis kroku..."></textarea>
+      <div class="step-photo">
+        <img alt="Podgląd zdjęcia" />
+        <input type="file" accept="image/*" capture="environment" class="photo-input" />
+      </div>
+    </div>
+  </template>
+
+  <dialog id="dlg-qr">
+    <h3>QR instrukcji</h3>
+    <canvas id="qr-canvas" width="256" height="256" aria-label="Kod QR"></canvas>
+    <menu>
+      <button id="qr-close">Zamknij</button>
+    </menu>
+  </dialog>
+
+  <dialog id="dlg-scan">
+    <h3>Skanuj kod QR</h3>
+    <video id="qr-video" playsinline></video>
+    <p id="qr-result" class="muted"></p>
+    <menu>
+      <button id="scan-close">Zamknij</button>
+    </menu>
+  </dialog>
+
+<!-- SCRIPTS (kolejność) -->
+<link rel="manifest" href="./manifest.webmanifest">
+
+<!-- Dexie musi być przed db.js -->
+<script src="https://unpkg.com/dexie@4.0.8/dist/dexie.min.js"></script>
+
+<script type="module" src="./src/db.js"></script>
+<script type="module" src="./src/qr.js"></script>
+<script type="module" src="./src/app.js"></script>
+<script type="module" src="./src/auth.js"></script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js'));
+}
+</script>
+
+</body>
+</html>
